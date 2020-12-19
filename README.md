@@ -1,3 +1,5 @@
+
+
 #### Project Setup
 - if `venv` is not installed:
     - for Mac or Linux:
@@ -175,3 +177,55 @@
 
         <img src = "test_template.png" width = "30%"/>
 
+#### Building up project
+
+1) Create landing page in `home.html`
+
+2) Create static folder inside `carproj` and add static content
+    - css, fonts, img, js
+
+3) Register static files inside of `settings.py`, then run `collectstatic` 
+    - add os import   `import os`
+    - add to the end of the file
+
+    ~~~ py
+    ...
+    STATIC_URL = '/static/'
+    STATIC_ROOT = os.path.join(BASE_DIR, 'static')  #BASE_DIR / 'db.sqlite3'
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'carproj/static'),
+    ]
+    ~~~
+
+    - `collectstatic` collects the static files into STATIC_ROOT
+
+    ~~~ bash
+    python manage.py collectstatic
+    ~~~
+
+    - this creates a `static` folder inside the `carproj` folder
+    <img src = "static_folder.png" width = "20%"/>
+
+4) Modify `home.html` to use the static files
+
+     - add {% load static %} to the top of the file
+    - modify all `href` that include css, ico, or js files
+    - also do the same for the `src`  in img tags with the alt tag `banner`
+
+        - before
+            ~~~ html
+            <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+            ...
+            <img class="d-block w-100 h-100" src="img/car-1.jpg" alt="banner">
+            ...
+            ~~~
+
+
+        - after
+            ~~~ html
+            <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+            ...
+            <img class="d-block w-100 h-100" src="{% static 'img/
+            car-1.jpg' %}" alt="banner">
+            ...
+            ~~~
