@@ -255,19 +255,40 @@
         {% endblock %}
         ~~~
 
+    - Configure `home.html` to use base template
 
-    - At the top of `home.html` add:
-        - this will load the 
-        ~~~ html
-        {% extends 'base.html' %}
+        - At the top of `home.html` add:
+    
+            ~~~ html
+            {% extends 'base.html' %}
 
-        {% block content %}
+            {% block content %}
 
-        {% load static %}
-        ~~~
+            {% load static %}
+            ~~~
 
-    - At the bottom of `home.html` add  `{% endblock %}` to indicate the end of the content
+        - At the bottom of `home.html` add  `{% endblock %}` to indicate the end of the content
 
+6) Break up `base.html` into sections
 
+Create an `includes` folder within the `templates` folder and create the following files:
 
+- `footer.html`
+- `navbar.html`
+- `topbar.html`
 
+    - Remove the `top header` code from `base.html` and copy into `topheader.html`
+    - Remove the `main header` code from `base.html` and copy into `navbar.html`
+        - add `{% load static %}` to the top of the `navbar.html`
+        - update `navbar.html` to utilize static files
+            - before 
+
+                ~~~ html
+                <img src="img/logos/black-logo.png" alt="logo">
+                ~~~ 
+
+            - after
+                ~~~ html
+                <img src= "{% static 'img/logos/black-logo.png' %}"  alt="logo">
+                ~~~
+    - Remove the `footer` code from `home.html` and copy into `footer.html`
