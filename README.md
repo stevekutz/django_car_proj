@@ -190,7 +190,7 @@
 2) Create static folder inside `carproj` and add static content
     - css, fonts, img, js
 
-3) Register static files inside of `settings.py`, then run `collectstatic` 
+3) Register static files inside of `settings.py`, then run `collectstatic`
     - add os import   `import os`
     - `os.path.join` joins path names into a single path
     - add to the end of the file
@@ -198,7 +198,7 @@
         ~~~ py
         ...
         STATIC_URL = '/static/'
-        STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # BASE_DIR / 'db.sqlite3'
+        STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # (BASE_DIR, 'db.sqlite3)'
         STATICFILES_DIRS = [
             os.path.join(BASE_DIR, 'carproj/static'),
         ]
@@ -210,7 +210,7 @@
         python manage.py collectstatic
         ~~~
 
-    - this creates a `static` folder inside the `carproj` folder
+    - this creates a `static` folder inside the `carproj` folder. Django also creates the `admin` folder
   
         <img src = "static_folder.png" width = "20%"/>
 
@@ -238,3 +238,36 @@
             car-1.jpg' %}" alt="banner">
             ...
             ~~~
+
+    - update paths to `img/logos/black-logo.png` to `static/img/logos/black-logo.png` since the header img will not be rendered dynamically
+    - NOTE: you may need to clear the browser cache to see this change take effect
+
+5) Set up Base Template
+
+    - Create `base.html` inside of the `templates` folder
+    - Move everything from top of `home.html` to `<!-- Main header end -->` into `base.html`
+    - Remove the `body` and `html` closing tags from `home.html` and add to the bottom of `base.html`
+    - Remove all `script` tags from the bottom of `home.html` and move to the bottom of `base.html` above the closing `body tag`
+    - Above the first `script` tag, add the following to allow rendering of `home.html`  content after the header content defined in `base.html`
+        ~~~ html
+        {% block content %}
+
+        {% endblock %}
+        ~~~
+
+
+    - At the top of `home.html` add:
+        - this will load the 
+        ~~~ html
+        {% extends 'base.html' %}
+
+        {% block content %}
+
+        {% load static %}
+        ~~~
+
+    - At the bottom of `home.html` add  `{% endblock %}` to indicate the end of the content
+
+
+
+
