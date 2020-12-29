@@ -183,7 +183,9 @@
 
         <img src = "test_template.png" width = "30%"/>
 
-#### Building up project
+## Building up project
+
+### Set up static templates
 
 1) Create landing page in `home.html`
 
@@ -292,3 +294,201 @@ Create an `includes` folder within the `templates` folder and create the followi
                 <img src= "{% static 'img/logos/black-logo.png' %}"  alt="logo">
                 ~~~
     - Remove the `footer` code from `home.html` and copy into `footer.html`
+
+### Adding Dynamic routes
+
+1) Add routes to the project `urls.py ` file for the about, services, & contact pages
+
+    ~~~ py
+    urlpatterns = [
+        path('', views.home, name = 'home'),
+        path('about', views.about, name = 'about'),
+        path('services', views.services, name = 'services'),
+        path('contact', views.contact, name = 'contact'),
+    ]
+    ~~~
+
+2) Create views in `views.py`
+
+    ~~~ py
+    def about(request):
+        return render(request, 'pages/about.html')
+
+    def services(request):
+        return render(request, 'pages/services.html')
+
+    def contact(request):
+        return render(request, 'pages/contact.html')
+    ~~~
+
+3) Create `about.html` inside of `templates/pages`
+
+    ~~~ html
+    {% extends 'base.html' %}
+
+    {% block content %}
+    {% load static %}
+
+        <!-- Sub banner start -->
+        <div class="sub-banner overview-bgi">
+            <div class="container breadcrumb-area">
+                <div class="breadcrumb-areas">
+                    <h1>About Us</h1>
+                    <ul class="breadcrumbs">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li class="active">About Us</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Sub Banner end -->
+
+        <!-- Service center start -->
+        <div class="about-car content-area-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-5 col-lg-6">
+                        <div class="about-car-photo">
+                            <div id="carDetailsSlider" class="carousel car-details-sliders slide">
+                                <!-- main slider carousel items -->
+                                <div class="carousel-inner">
+                                    <div class="active item carousel-item" data-slide-number="0">
+                                        <img src = "{% static 'img/car/car-1.jpg' %}" class="img-fluid" alt="slider-car">
+                                    </div>
+                                    <div class="item carousel-item" data-slide-number="1">
+                                        <img src = "{% static 'img/car/car-2.jpg' %} class="img-fluid" alt="slider-car">
+                                    </div>
+                                    <div class="item carousel-item" data-slide-number="2">
+                                        <img src = "{% static 'img/car/car-3.jpg' %} class="img-fluid" alt="slider-car">
+                                    </div>
+                                </div>
+                                <!-- main slider carousel nav controls -->
+                                <ul class="carousel-indicators car-properties list-inline nav nav-justified">
+                                    <li class="list-inline-item active">
+                                        <a id="carousel-selector-0" class="selected" data-slide-to="0" data-target="#carDetailsSlider">
+                                            <img src = "{% static 'img/car/car-1.jpg' %}" class="img-fluid" alt="small-car">
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a id="carousel-selector-1" data-slide-to="1" data-target="#carDetailsSlider">
+                                            <img src = "{% static 'img/car/car-2.jpg' %}" class="img-fluid" alt="small-car">
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a id="carousel-selector-2" data-slide-to="2" data-target="#carDetailsSlider">
+                                            <img src = "{% static 'img/car/car-3.jpg' %}" class="img-fluid" alt="small-car">
+                                        </a>
+                                    ...
+        <!-- Service center end -->
+
+
+
+        <!-- Our team start -->
+        ....
+        <!-- Our team end -->   
+    {% endblock %}
+    ~~~
+
+    ~~~ html
+    <h2> Simple services page </h2>
+    ~~~
+
+    ~~~ html
+    <h2> Simple contact page </h2>
+    ~~~
+
+4) Create `services.html` inside of `templates/pages` 
+
+    ~~~ html
+    {% extends 'base.html' %}
+
+    {% block content %}
+    {% load static %}
+
+        <!-- Sub banner start -->
+        <div class="sub-banner overview-bgi">
+            <div class="container breadcrumb-area">
+                <div class="breadcrumb-areas">
+                    <h1>Services</h1>
+                    <ul class="breadcrumbs">
+                        <li><a href = "{% url 'home' %}">Home</a></li>
+                        <li class="active">Services</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Sub Banner end -->
+
+        <!-- Services start -->
+        ...
+        <!-- Services end -->
+
+
+    {% endblock %}
+    ~~~
+
+5) Create `contact.html` inside of `templates/pages`
+
+    ~~~ html
+    {% extends 'base.html' %}
+
+    {% block content %}
+    {% load static %}
+
+        <!-- Sub banner start -->
+        ...
+        <!-- Sub Banner end -->
+
+        <!-- Contact 2 start -->
+        ...
+        <!-- Contact 2 end -->
+
+    {% endblock %}
+    ~~~
+
+6) Move the `Full Page Search` and `Car Overview Modal` into the bottom `base.html` to include the search functionality on every page
+
+    ~~~ html
+    {% include 'includes/navbar.html' %}
+
+    <!-- this is the main content from home.html-->
+    {% block content %}
+
+    {% endblock %}
+
+    <!-- Full Page Search -->
+    <div id="full-page-search">
+        <button type="button" class="close">×</button>
+        <form action="https://storage.googleapis.com/theme-vessel/carhouse/index.html#" class="search-header">
+            <input type="search" value="" placeholder="type keyword(s) here. Eg: audi, benz etc" />
+            <button type="submit" class="btn btn-sm button-theme">Search</button>
+        </form>
+    </div>
+
+    <!-- Car Overview Modal -->
+    ...
+    ~~~
+
+
+
+7) Update the links in `navebar.html`
+
+    ~~~ html
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'about' %}">
+                About
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'services' %}">
+                Services
+            </a>
+        </li>
+
+
+        <li class="nav-item dropdown">
+            <a class="nav-link" href="{% url 'contact' %}">Contact</a>
+        </li>
+    ~~~
+
+
